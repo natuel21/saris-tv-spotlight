@@ -1,24 +1,54 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Toaster } from "@/components/ui/sonner";
+import { Nav } from "@/components/saris/Nav";
+import { Hero } from "@/components/saris/Hero";
+import { Featured } from "@/components/saris/Featured";
+import { LatestReviews } from "@/components/saris/LatestReviews";
+import { Trending } from "@/components/saris/Trending";
+import { Videos } from "@/components/saris/Videos";
+import { Social } from "@/components/saris/Social";
+import { About } from "@/components/saris/About";
+import { Newsletter } from "@/components/saris/Newsletter";
+import { Footer } from "@/components/saris/Footer";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Saris TV — Ethiopian Reviews, Trends & Entertainment" },
+      {
+        name: "description",
+        content:
+          "Saris TV reviews Ethiopian film, music, TV, creators and trends. Honest ratings, trending stories and weekly video episodes.",
+      },
+      { property: "og:title", content: "Saris TV — We Watch. We Review. You Decide." },
+      {
+        property: "og:description",
+        content:
+          "Honest reviews and reactions to the people, entertainment and trends shaping Ethiopian social media.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <Nav />
+      <main>
+        <Hero />
+        <Featured />
+        <LatestReviews />
+        <Trending />
+        <Videos />
+        <Social />
+        <About />
+        <Newsletter />
+      </main>
+      <Footer />
+      <Toaster />
     </div>
   );
 }
