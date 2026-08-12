@@ -1,7 +1,9 @@
-import { ArrowRight } from "lucide-react";
-import featuredImg from "@/assets/featured.jpg";
+import { Play } from "lucide-react";
 import { Rating, VerdictBadge } from "./Rating";
 import { Reveal } from "./Section";
+import { thumb, videos, watchUrl } from "@/lib/saris";
+
+const feature = videos[1]!;
 
 export function Featured() {
   return (
@@ -12,11 +14,14 @@ export function Featured() {
           The Review of the Week
         </p>
 
-        <article className="group grid overflow-hidden rounded-3xl border border-border bg-card lg:grid-cols-[1.15fr_1fr]">
+        <article
+          className="group grid overflow-hidden rounded-3xl border border-border bg-card lg:grid-cols-[1.15fr_1fr]"
+          style={{ boxShadow: "var(--shadow-lift)" }}
+        >
           <div className="relative overflow-hidden">
             <img
-              src={featuredImg}
-              alt="Ethiopian actress on a film set lit in warm cinematic light"
+              src={thumb(feature.id)}
+              alt={feature.title}
               loading="lazy"
               width={1600}
               height={1104}
@@ -30,19 +35,19 @@ export function Featured() {
           <div className="flex flex-col justify-center gap-6 p-7 md:p-12">
             <div className="flex flex-wrap items-center gap-4">
               <span className="micro-label rounded-full bg-primary px-3 py-1 text-primary-foreground">
-                Film Review
+                {feature.category}
               </span>
-              <span className="micro-label text-muted-foreground">Review #024</span>
-              <span className="micro-label text-muted-foreground">8 min read</span>
+              <span className="micro-label text-muted-foreground">Saris TV Episode</span>
+              <span className="micro-label text-muted-foreground">{feature.date}</span>
             </div>
 
             <h3 className="text-3xl leading-[1.08] font-bold md:text-[2.75rem]">
-              Is This the Best Ethiopian Film This Year?
+              {feature.title}
             </h3>
 
             <p className="text-muted-foreground md:text-lg">
-              A slow-burning Addis love story with the sharpest cinematography we've seen from a
-              local production — but does the third act earn the hype it's getting online?
+              {feature.amharic} — a full market walkthrough with current prices, honest commentary
+              and everything you need before you buy.
             </p>
 
             <Rating value={4.5} size={20} />
@@ -51,15 +56,17 @@ export function Featured() {
 
             <div className="flex flex-wrap items-center justify-between gap-5">
               <div>
-                <p className="font-display text-sm font-semibold">Reviewed by Mikiyas T.</p>
-                <p className="micro-label mt-1 text-muted-foreground">Updated Aug 2026</p>
+                <p className="font-display text-sm font-semibold">Reviewed by the Saris TV team</p>
+                <p className="micro-label mt-1 text-muted-foreground">Straight from the channel</p>
               </div>
               <a
-                href="#reviews"
+                href={watchUrl(feature.id)}
+                target="_blank"
+                rel="noreferrer noopener"
                 className="font-display inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-transform duration-200 hover:scale-[1.04]"
               >
-                Read Review
-                <ArrowRight size={16} />
+                <Play size={14} className="fill-current" strokeWidth={0} />
+                Watch Review
               </a>
             </div>
           </div>

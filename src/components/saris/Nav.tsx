@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { Menu, Search, X, Youtube, Instagram, Play } from "lucide-react";
+import { Menu, X, Youtube, Instagram, Play } from "lucide-react";
+import logo from "@/assets/saris-logo.png.asset.json";
+import { SOCIAL } from "@/lib/saris";
 
 const links = ["Home", "Reviews", "Trending", "Videos", "About"];
 
@@ -25,13 +27,14 @@ export function Nav() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-5 md:h-20 md:px-10">
-        <a href="#top" className="flex items-center gap-2">
-          <span className="font-display text-xl font-bold tracking-[-0.04em] md:text-2xl">
-            SARIS
-          </span>
-          <span className="font-display rounded-md bg-primary px-1.5 py-0.5 text-xl font-bold tracking-[-0.04em] text-primary-foreground md:text-2xl">
-            TV
-          </span>
+        <a href="#top" className="flex items-center">
+          <img
+            src={logo.url}
+            alt="Saris TV logo"
+            width={320}
+            height={160}
+            className="h-9 w-auto md:h-11"
+          />
         </a>
 
         <nav className="hidden items-center gap-9 lg:flex">
@@ -43,26 +46,27 @@ export function Nav() {
         </nav>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <button
-            aria-label="Search"
-            className="hidden size-10 items-center justify-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-secondary hover:text-foreground md:inline-flex"
-          >
-            <Search size={18} />
-          </button>
           <div className="hidden items-center gap-1 xl:flex">
-            {[Youtube, Instagram].map((Icon, i) => (
+            {[
+              { Icon: Youtube, href: SOCIAL.youtube, label: "YouTube" },
+              { Icon: Instagram, href: SOCIAL.instagram, label: "Instagram" },
+            ].map(({ Icon, href, label }) => (
               <a
-                key={i}
-                href="#follow"
-                aria-label="Social profile"
-                className="inline-flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-secondary hover:text-foreground"
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={`Saris TV on ${label}`}
+                className="inline-flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-secondary hover:text-primary"
               >
                 <Icon size={18} />
               </a>
             ))}
           </div>
           <a
-            href="#videos"
+            href={SOCIAL.youtube}
+            target="_blank"
+            rel="noreferrer noopener"
             className="font-display inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-transform duration-200 hover:scale-[1.04] md:px-5"
           >
             <Play size={14} className="fill-current" strokeWidth={0} />
