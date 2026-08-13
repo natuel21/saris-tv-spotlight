@@ -14,7 +14,197 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      yt_config: {
+        Row: {
+          featured_mode: string
+          featured_video_id: string | null
+          id: boolean
+          latest_count: number
+          min_trending_score: number
+          refresh_seconds: number
+          shorts_count: number
+          trending_count: number
+          trending_window_days: number
+          updated_at: string
+          weight_engagement: number
+          weight_growth: number
+          weight_popularity: number
+          weight_recency: number
+          weight_velocity: number
+        }
+        Insert: {
+          featured_mode?: string
+          featured_video_id?: string | null
+          id?: boolean
+          latest_count?: number
+          min_trending_score?: number
+          refresh_seconds?: number
+          shorts_count?: number
+          trending_count?: number
+          trending_window_days?: number
+          updated_at?: string
+          weight_engagement?: number
+          weight_growth?: number
+          weight_popularity?: number
+          weight_recency?: number
+          weight_velocity?: number
+        }
+        Update: {
+          featured_mode?: string
+          featured_video_id?: string | null
+          id?: boolean
+          latest_count?: number
+          min_trending_score?: number
+          refresh_seconds?: number
+          shorts_count?: number
+          trending_count?: number
+          trending_window_days?: number
+          updated_at?: string
+          weight_engagement?: number
+          weight_growth?: number
+          weight_popularity?: number
+          weight_recency?: number
+          weight_velocity?: number
+        }
+        Relationships: []
+      }
+      yt_stats_snapshots: {
+        Row: {
+          captured_at: string
+          comment_count: number | null
+          id: number
+          like_count: number | null
+          video_id: string
+          view_count: number
+        }
+        Insert: {
+          captured_at?: string
+          comment_count?: number | null
+          id?: number
+          like_count?: number | null
+          video_id: string
+          view_count?: number
+        }
+        Update: {
+          captured_at?: string
+          comment_count?: number | null
+          id?: number
+          like_count?: number | null
+          video_id?: string
+          view_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "yt_stats_snapshots_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "yt_videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      yt_sync_state: {
+        Row: {
+          channel_id: string
+          id: boolean
+          last_attempt_at: string | null
+          last_error: string | null
+          last_success_at: string | null
+          updated_at: string
+          uploads_playlist_id: string | null
+          video_count: number
+        }
+        Insert: {
+          channel_id?: string
+          id?: boolean
+          last_attempt_at?: string | null
+          last_error?: string | null
+          last_success_at?: string | null
+          updated_at?: string
+          uploads_playlist_id?: string | null
+          video_count?: number
+        }
+        Update: {
+          channel_id?: string
+          id?: boolean
+          last_attempt_at?: string | null
+          last_error?: string | null
+          last_success_at?: string | null
+          updated_at?: string
+          uploads_playlist_id?: string | null
+          video_count?: number
+        }
+        Relationships: []
+      }
+      yt_videos: {
+        Row: {
+          category: string
+          comment_count: number | null
+          created_at: string
+          description: string
+          duration_seconds: number
+          id: string
+          like_count: number | null
+          live_status: string | null
+          published_at: string
+          recent_view_gain: number
+          stats_updated_at: string
+          thumbnail_url: string
+          title: string
+          trending_badge: string | null
+          trending_score: number
+          updated_at: string
+          video_type: string
+          view_count: number
+          views_per_day: number
+          views_per_hour: number
+        }
+        Insert: {
+          category?: string
+          comment_count?: number | null
+          created_at?: string
+          description?: string
+          duration_seconds?: number
+          id: string
+          like_count?: number | null
+          live_status?: string | null
+          published_at: string
+          recent_view_gain?: number
+          stats_updated_at?: string
+          thumbnail_url?: string
+          title: string
+          trending_badge?: string | null
+          trending_score?: number
+          updated_at?: string
+          video_type?: string
+          view_count?: number
+          views_per_day?: number
+          views_per_hour?: number
+        }
+        Update: {
+          category?: string
+          comment_count?: number | null
+          created_at?: string
+          description?: string
+          duration_seconds?: number
+          id?: string
+          like_count?: number | null
+          live_status?: string | null
+          published_at?: string
+          recent_view_gain?: number
+          stats_updated_at?: string
+          thumbnail_url?: string
+          title?: string
+          trending_badge?: string | null
+          trending_score?: number
+          updated_at?: string
+          video_type?: string
+          view_count?: number
+          views_per_day?: number
+          views_per_hour?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
