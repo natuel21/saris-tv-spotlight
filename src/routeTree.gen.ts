@@ -10,33 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicYoutubeSyncRouteImport } from './routes/api/public/youtube/sync'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicYoutubeSyncRoute = ApiPublicYoutubeSyncRouteImport.update({
+  id: '/api/public/youtube/sync',
+  path: '/api/public/youtube/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/public/youtube/sync': typeof ApiPublicYoutubeSyncRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/public/youtube/sync': typeof ApiPublicYoutubeSyncRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/public/youtube/sync': typeof ApiPublicYoutubeSyncRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/api/public/youtube/sync'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/api/public/youtube/sync'
+  id: '__root__' | '/' | '/api/public/youtube/sync'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiPublicYoutubeSyncRoute: typeof ApiPublicYoutubeSyncRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +58,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/youtube/sync': {
+      id: '/api/public/youtube/sync'
+      path: '/api/public/youtube/sync'
+      fullPath: '/api/public/youtube/sync'
+      preLoaderRoute: typeof ApiPublicYoutubeSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiPublicYoutubeSyncRoute: ApiPublicYoutubeSyncRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
