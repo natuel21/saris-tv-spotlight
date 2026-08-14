@@ -1,6 +1,43 @@
+import { useMemo, useState } from "react";
 import { Play, Eye, TrendingUp } from "lucide-react";
 import type { SiteVideo } from "@/lib/youtube.functions";
-import { formatCount, formatDuration, thumbnailFor, timeAgo } from "@/lib/format";
+import { formatCount, formatDuration, timeAgo } from "@/lib/format";
+
+/** Real YouTube thumbnail with the documented resolution fallback chain. */
+export function Thumb({
+  video,
+  className = "",
+  eager = false,
+}: {
+  video: SiteVideo;
+  className?: string;
+  eager?: boolean;
+}) {
+  const sources = useMemo(() => {
+    const cdn = (name: string) => `https://i.ytimg.com/vi/${video.id}/${name}.jpg`;
+    return [
+      video.thumbnail,
+      cdn("maxresdefault"),
+      cdn("sddefault"),
+      cdn("hqdefault"),
+      cdn("mqdefault"),
+      cdn("default"),
+    ].filter(Boolean) as string[];
+  }, [video.id, video.thumbnail]);
+  const [index, setIndex] = useState(0);
+
+  return (
+    <img
+      src={sources[Math.min(index, sources.length - 1)]}
+      alt={video.title}
+      width={1280}
+      height={720}
+      loading={eager ? "eager" : "lazy"}
+      onError={() => setIndex((i) => (i < sources.length - 1 ? i + 1 : i))}
+      className={`size-full object-cover ${className}`}
+    />
+  );
+}
 
 export function TrendingBadge({ badge }: { badge: string | null }) {
   if (!badge) return null;
@@ -36,15 +73,9 @@ export function VideoCard({ video, rank }: { video: SiteVideo; rank?: number }) 
       className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/50"
       style={{ boxShadow: "var(--shadow-lift)" }}
     >
-      <div className="relative overflow-hidden">
-        <img
-          src={thumbnailFor(video.id, "md", video.thumbnail)}
-          alt={video.title}
-          loading="lazy"
-          width={480}
-          height={360}
-          className="h-48 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-        />
+      <div className="relative aspect-video overflow-hidden">
+        <Thumb video={video} className="transition-transform duration-500 ease-out group-hover:scale-105" />
+        <div className="absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/25" />
         <PlayOverlay />
         {rank !== undefined ? (
           <span className="font-display absolute left-4 top-3 text-4xl font-bold text-background drop-shadow-md">
