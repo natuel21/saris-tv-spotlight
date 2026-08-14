@@ -139,6 +139,7 @@ export type Database = {
       yt_videos: {
         Row: {
           category: string
+          channel_id: string
           comment_count: number | null
           created_at: string
           description: string
@@ -161,6 +162,7 @@ export type Database = {
         }
         Insert: {
           category?: string
+          channel_id?: string
           comment_count?: number | null
           created_at?: string
           description?: string
@@ -183,6 +185,7 @@ export type Database = {
         }
         Update: {
           category?: string
+          channel_id?: string
           comment_count?: number | null
           created_at?: string
           description?: string
