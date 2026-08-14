@@ -5,6 +5,7 @@ import type { Database } from "@/integrations/supabase/types";
 
 export type SiteVideo = {
   id: string;
+  channelId: string;
   title: string;
   description: string;
   thumbnail: string;
@@ -26,6 +27,7 @@ export type SiteVideo = {
 
 export type SiteContent = {
   featured: SiteVideo | null;
+  all: SiteVideo[];
   latest: SiteVideo[];
   trending: SiteVideo[];
   shorts: SiteVideo[];
@@ -57,6 +59,7 @@ type Row = Database["public"]["Tables"]["yt_videos"]["Row"];
 function toVideo(r: Row): SiteVideo {
   return {
     id: r.id,
+    channelId: r.channel_id,
     title: r.title,
     description: r.description,
     thumbnail: r.thumbnail_url,
@@ -101,7 +104,10 @@ export const getSiteContent = createServerFn({ method: "GET" }).handler(
       supabase.from("yt_sync_state").select("*").eq("id", true).maybeSingle(),
     ]);
 
-    const all = (videos ?? []).map(toVideo);
+    const all = (videos ?? [])
+      .map(toVideo)
+      // Defensive: only official Saris TV uploads with the data a card needs.
+      .filter((v) => v.channelId === "UCAkXYb7vzhJbIe7HLSR4n2A" && v.id && v.title && v.publishedAt);
     const longForm = all.filter((v) => v.type !== "short");
     const shorts = all.filter((v) => v.type === "short");
 
@@ -123,6 +129,7 @@ export const getSiteContent = createServerFn({ method: "GET" }).handler(
 
     return {
       featured,
+      all,
       latest,
       trending,
       shorts: shorts.slice(0, cfg?.shorts_count ?? 8),
