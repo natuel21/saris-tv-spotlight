@@ -1,0 +1,1 @@
+ALTER TABLE public.yt_videos ADD COLUMN channel_id TEXT NOT NULL DEFAULT 'UCAkXYb7vzhJbIe7HLSR4n2A';

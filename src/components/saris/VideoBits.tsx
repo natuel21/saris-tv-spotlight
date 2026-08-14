@@ -1,6 +1,43 @@
+import { useMemo, useState } from "react";
 import { Play, Eye, TrendingUp } from "lucide-react";
 import type { SiteVideo } from "@/lib/youtube.functions";
-import { formatCount, formatDuration, thumbnailFor, timeAgo } from "@/lib/format";
+import { formatCount, formatDuration, timeAgo } from "@/lib/format";
+
+/** Real YouTube thumbnail with the documented resolution fallback chain. */
+export function Thumb({
+  video,
+  className = "",
+  eager = false,
+}: {
+  video: SiteVideo;
+  className?: string;
+  eager?: boolean;
+}) {
+  const sources = useMemo(() => {
+    const cdn = (name: string) => `https://i.ytimg.com/vi/${video.id}/${name}.jpg`;
+    return [
+      video.thumbnail,
+      cdn("maxresdefault"),
+      cdn("sddefault"),
+      cdn("hqdefault"),
+      cdn("mqdefault"),
+      cdn("default"),
+    ].filter(Boolean) as string[];
+  }, [video.id, video.thumbnail]);
+  const [index, setIndex] = useState(0);
+
+  return (
+    <img
+      src={sources[Math.min(index, sources.length - 1)]}
+      alt={video.title}
+      width={1280}
+      height={720}
+      loading={eager ? "eager" : "lazy"}
+      onError={() => setIndex((i) => (i < sources.length - 1 ? i + 1 : i))}
+      className={`size-full object-cover ${className}`}
+    />
+  );
+}
 
 export function TrendingBadge({ badge }: { badge: string | null }) {
   if (!badge) return null;
@@ -17,7 +54,7 @@ export function PlayOverlay({ big = false }: { big?: boolean }) {
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-foreground/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
       <span
-        className={`inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform duration-300 group-hover:scale-110 ${
+        className={`inline-flex items-center justify-center rounded-full bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110 ${
           big ? "size-20" : "size-14"
         }`}
       >
@@ -36,15 +73,9 @@ export function VideoCard({ video, rank }: { video: SiteVideo; rank?: number }) 
       className="group flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/50"
       style={{ boxShadow: "var(--shadow-lift)" }}
     >
-      <div className="relative overflow-hidden">
-        <img
-          src={thumbnailFor(video.id, "md", video.thumbnail)}
-          alt={video.title}
-          loading="lazy"
-          width={480}
-          height={360}
-          className="h-48 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-        />
+      <div className="relative aspect-video overflow-hidden">
+        <Thumb video={video} className="transition-transform duration-500 ease-out group-hover:scale-105" />
+        <div className="absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/25" />
         <PlayOverlay />
         {rank !== undefined ? (
           <span className="font-display absolute left-4 top-3 text-4xl font-bold text-background drop-shadow-md">
@@ -88,6 +119,14 @@ export function VideoCard({ video, rank }: { video: SiteVideo; rank?: number }) 
 
 export function CardSkeleton() {
   return (
-    <div className="h-[22rem] animate-pulse rounded-3xl border border-border bg-surface" />
+    <div className="overflow-hidden rounded-3xl border border-border bg-card">
+      <div className="aspect-video w-full animate-pulse bg-surface" />
+      <div className="space-y-3 p-6">
+        <div className="h-3 w-24 animate-pulse rounded-full bg-surface" />
+        <div className="h-4 w-full animate-pulse rounded-full bg-surface" />
+        <div className="h-4 w-3/5 animate-pulse rounded-full bg-surface" />
+        <div className="h-3 w-2/5 animate-pulse rounded-full bg-surface" />
+      </div>
+    </div>
   );
 }

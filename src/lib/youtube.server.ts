@@ -133,6 +133,7 @@ type VideoList = {
       title: string;
       description: string;
       publishedAt: string;
+      channelId: string;
       liveBroadcastContent?: string;
       thumbnails: Record<string, { url: string; width: number }>;
     };
@@ -205,7 +206,10 @@ export async function syncChannel(options: { maxVideos?: number } = {}) {
     const prevMap = new Map((previous ?? []).map((p) => [p.id, p]));
 
     const now = Date.now();
-    const rows = details.map((v) => {
+    const rows = details
+      // Never show anything that is not on the official Saris TV channel.
+      .filter((v) => v.snippet?.channelId === CHANNEL_ID && v.snippet?.title && v.snippet?.publishedAt)
+      .map((v) => {
       const duration = parseDuration(v.contentDetails?.duration ?? "");
       const live = v.snippet.liveBroadcastContent;
       const isShort = duration > 0 && duration <= 60;
@@ -236,6 +240,7 @@ export async function syncChannel(options: { maxVideos?: number } = {}) {
 
       return {
         id: v.id,
+        channel_id: v.snippet.channelId,
         title: v.snippet.title,
         description: v.snippet.description ?? "",
         thumbnail_url: thumb,

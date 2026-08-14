@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useSarisContent } from "@/hooks/useSarisContent";
 import { Toaster } from "@/components/ui/sonner";
 import { Nav } from "@/components/saris/Nav";
 import { Hero } from "@/components/saris/Hero";
@@ -34,15 +35,28 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { data, isLoading, isFetching, refetch } = useSarisContent();
+  const refresh = () => void refetch();
+
   return (
     <div className="min-h-screen bg-background">
       <Nav />
       <main>
-        <Hero />
-        <Featured />
-        <LatestReviews />
-        <Trending />
-        <Videos />
+        <Hero latest={data?.latest?.[0] ?? data?.featured ?? null} />
+        <Featured video={data?.featured ?? null} isLoading={isLoading} />
+        <LatestReviews
+          content={data}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          onRefresh={refresh}
+        />
+        <Trending
+          content={data}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          onRefresh={refresh}
+        />
+        <Videos content={data} isLoading={isLoading} />
         <Social />
         <About />
         <Newsletter />
