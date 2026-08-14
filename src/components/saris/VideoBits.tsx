@@ -54,7 +54,7 @@ export function PlayOverlay({ big = false }: { big?: boolean }) {
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-foreground/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
       <span
-        className={`inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground transition-transform duration-300 group-hover:scale-110 ${
+        className={`inline-flex items-center justify-center rounded-full bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110 ${
           big ? "size-20" : "size-14"
         }`}
       >
@@ -119,6 +119,14 @@ export function VideoCard({ video, rank }: { video: SiteVideo; rank?: number }) 
 
 export function CardSkeleton() {
   return (
-    <div className="h-[22rem] animate-pulse rounded-3xl border border-border bg-surface" />
+    <div className="overflow-hidden rounded-3xl border border-border bg-card">
+      <div className="aspect-video w-full animate-pulse bg-surface" />
+      <div className="space-y-3 p-6">
+        <div className="h-3 w-24 animate-pulse rounded-full bg-surface" />
+        <div className="h-4 w-full animate-pulse rounded-full bg-surface" />
+        <div className="h-4 w-3/5 animate-pulse rounded-full bg-surface" />
+        <div className="h-3 w-2/5 animate-pulse rounded-full bg-surface" />
+      </div>
+    </div>
   );
 }

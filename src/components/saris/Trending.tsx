@@ -1,73 +1,98 @@
-import { Eye, Flame } from "lucide-react";
-import musicImg from "@/assets/music.jpg";
-import creatorImg from "@/assets/creator.jpg";
-import tvImg from "@/assets/tv.jpg";
-import trendImg from "@/assets/trend.jpg";
-import cultureImg from "@/assets/culture.jpg";
+import { Eye, TrendingUp } from "lucide-react";
 import { Reveal, SectionHead } from "./Section";
+import { CardSkeleton, PlayOverlay, Thumb, TrendingBadge } from "./VideoBits";
+import { LiveStatus } from "./LiveStatus";
+import { ContentProblem } from "./EmptyState";
+import { formatCount, timeAgo } from "@/lib/format";
+import type { SiteContent } from "@/lib/youtube.functions";
 
-const items = [
-  { n: "01", title: "The Ethiopian Music Video Everyone Is Talking About", cat: "Music", views: "412K", image: musicImg },
-  { n: "02", title: "The Creator Taking Over TikTok This Month", cat: "Creators", views: "308K", image: creatorImg },
-  { n: "03", title: "This Movie Has Everyone Divided", cat: "Movies", views: "266K", image: tvImg },
-  { n: "04", title: "Street Style Is the New Timeline Obsession", cat: "Trends", views: "191K", image: trendImg },
-  { n: "05", title: "The Coffee Ceremony Format That Won August", cat: "Culture", views: "154K", image: cultureImg },
-];
+export function Trending({
+  content,
+  isLoading,
+  isFetching,
+  onRefresh,
+}: {
+  content: SiteContent | undefined;
+  isLoading: boolean;
+  isFetching: boolean;
+  onRefresh: () => void;
+}) {
+  const items = content?.trending ?? [];
 
-export function Trending() {
   return (
     <section id="trending" className="relative overflow-hidden bg-surface py-20 md:py-28">
       <div className="mx-auto max-w-[1400px] px-5 md:px-10">
         <Reveal>
-          <SectionHead
-            kicker="Right Now"
-            title="Trending Now"
-            subtitle="The stories, sounds and people dominating Ethiopian timelines this week."
-          />
+          <div className="flex flex-wrap items-end justify-between gap-5">
+            <SectionHead
+              kicker="Right Now"
+              title="Trending Now"
+              subtitle="Ranked by how fast Saris TV videos are gaining views right now."
+            />
+            <LiveStatus
+              lastUpdated={content?.lastUpdated}
+              isFetching={isFetching}
+              onRefresh={onRefresh}
+            />
+          </div>
         </Reveal>
       </div>
 
-      <div className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 md:px-10">
-        {items.map((it) => (
-          <article
-            key={it.n}
-            className="group relative w-[78vw] shrink-0 snap-start overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 sm:w-[380px]"
-          >
-            <span
-              className="font-display pointer-events-none absolute -right-2 top-0 z-10 text-[7rem] leading-none font-bold text-foreground/8 select-none"
-              aria-hidden
+      {isLoading ? (
+        <div className="mx-auto mt-12 grid max-w-[1400px] gap-5 px-5 sm:grid-cols-2 lg:grid-cols-3 md:px-10">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <CardSkeleton key={i} />
+          ))}
+        </div>
+      ) : items.length === 0 ? (
+        <div className="mx-auto mt-12 max-w-[1400px] px-5 md:px-10">
+          <ContentProblem lastUpdated={content?.lastUpdated} error={content?.lastError} />
+        </div>
+      ) : (
+        <div className="no-scrollbar mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 md:px-10">
+          {items.map((v, i) => (
+            <a
+              key={v.id}
+              href={v.url}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="group relative w-[78vw] shrink-0 snap-start overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/50 sm:w-[380px]"
+              style={{ boxShadow: "var(--shadow-lift)" }}
             >
-              {it.n}
-            </span>
-            <div className="overflow-hidden">
-              <img
-                src={it.image}
-                alt={it.title}
-                loading="lazy"
-                width={1200}
-                height={800}
-                className="h-48 w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-              />
-            </div>
-            <div className="relative z-20 flex flex-col gap-3 p-6">
-              <div className="flex items-center gap-3">
-                <span className="micro-label text-primary">{it.n}</span>
-                <span className="micro-label text-muted-foreground">{it.cat}</span>
-              </div>
-              <h3 className="text-lg leading-snug font-semibold">{it.title}</h3>
-              <div className="flex items-center gap-4 text-muted-foreground">
-                <span className="flex items-center gap-1.5 text-xs">
-                  <Eye size={14} /> {it.views}
-                </span>
-                <span className="flex items-center gap-1.5 text-xs text-primary">
-                  <Flame size={14} /> Hot
+              <div className="relative aspect-video overflow-hidden">
+                <Thumb
+                  video={v}
+                  className="transition-transform duration-500 ease-out group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-primary/0 transition-colors duration-300 group-hover:bg-primary/25" />
+                <PlayOverlay />
+                <span className="font-display absolute left-4 top-2 text-5xl font-bold text-background drop-shadow-lg">
+                  {String(i + 1).padStart(2, "0")}
                 </span>
               </div>
-            </div>
-          </article>
-        ))}
-        <div className="w-1 shrink-0" />
-      </div>
+              <div className="relative z-20 flex flex-col gap-3 p-6">
+                <div className="flex flex-wrap items-center gap-2">
+                  <TrendingBadge badge={v.badge} />
+                  <span className="micro-label text-muted-foreground">{v.category}</span>
+                </div>
+                <h3 className="line-clamp-3 text-lg leading-snug font-semibold">{v.title}</h3>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1.5">
+                    <Eye size={14} /> {formatCount(v.views)} views
+                  </span>
+                  {v.viewsPerHour >= 1 ? (
+                    <span className="flex items-center gap-1.5 text-primary">
+                      <TrendingUp size={14} /> {formatCount(Math.round(v.viewsPerHour))}/hr
+                    </span>
+                  ) : null}
+                  <span>{timeAgo(v.publishedAt)}</span>
+                </div>
+              </div>
+            </a>
+          ))}
+          <div className="w-1 shrink-0" />
+        </div>
+      )}
     </section>
   );
 }
