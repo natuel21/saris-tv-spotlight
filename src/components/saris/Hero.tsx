@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, Play } from "lucide-react";
 import heroImg from "@/assets/hero.jpg";
-import { SOCIAL, videos, watchUrl } from "@/lib/saris";
+import { SOCIAL, CHANNEL_URL } from "@/lib/saris";
+import type { SiteVideo } from "@/lib/youtube.functions";
 
-export function Hero() {
+export function Hero({ latest }: { latest?: SiteVideo | null }) {
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export function Hero() {
               <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
             </a>
             <a
-              href={watchUrl(videos[0]!.id)}
+              href={latest?.url ?? CHANNEL_URL}
               target="_blank"
               rel="noreferrer noopener"
               className="font-display inline-flex items-center justify-center gap-2 rounded-full border border-on-hero/40 bg-on-hero/10 px-7 py-4 text-sm font-semibold text-on-hero backdrop-blur-md transition-colors duration-200 hover:bg-accent hover:text-accent-foreground"
