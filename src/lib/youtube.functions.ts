@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
+import { PROMOTION_MARKERS, brandFromTitle, isPromotionalVideo } from "@/lib/promotions";
 
 export type SiteVideo = {
   id: string;
@@ -23,6 +24,8 @@ export type SiteVideo = {
   recentGain: number;
   badge: string | null;
   url: string;
+  isPromotion: boolean;
+  brand: string | null;
 };
 
 export type SiteContent = {
@@ -32,6 +35,10 @@ export type SiteContent = {
   trending: SiteVideo[];
   shorts: SiteVideo[];
   more: SiteVideo[];
+  promotions: SiteVideo[];
+  aboutVideoId: string | null;
+  aboutVideo: SiteVideo | null;
+  promotionMarkers: string[];
   lastUpdated: string | null;
   lastError: string | null;
   refreshSeconds: number;
@@ -56,7 +63,8 @@ function publicClient() {
 
 type Row = Database["public"]["Tables"]["yt_videos"]["Row"];
 
-function toVideo(r: Row): SiteVideo {
+function toVideo(r: Row, markers: readonly string[] = PROMOTION_MARKERS): SiteVideo {
+  const promo = isPromotionalVideo({ title: r.title, description: r.description }, markers);
   return {
     id: r.id,
     channelId: r.channel_id,
@@ -77,6 +85,8 @@ function toVideo(r: Row): SiteVideo {
     recentGain: Number(r.recent_view_gain),
     badge: r.trending_badge,
     url: `https://www.youtube.com/watch?v=${r.id}`,
+    isPromotion: promo,
+    brand: promo ? brandFromTitle(r.title, markers) : null,
   };
 }
 
@@ -91,6 +101,7 @@ export const getSiteContent = createServerFn({ method: "GET" }).handler(
     ]);
 
     const refreshSeconds = cfg?.refresh_seconds ?? 120;
+    const markers = (cfg?.promotion_markers as string[] | null) ?? [...PROMOTION_MARKERS];
     const lastSuccess = state?.last_success_at ? new Date(state.last_success_at).getTime() : 0;
     const stale = Date.now() - lastSuccess > refreshSeconds * 1000;
 
@@ -105,7 +116,7 @@ export const getSiteContent = createServerFn({ method: "GET" }).handler(
     ]);
 
     const all = (videos ?? [])
-      .map(toVideo)
+      .map((r) => toVideo(r, markers))
       // Defensive: only official Saris TV uploads with the data a card needs.
       .filter((v) => v.channelId === "UCAkXYb7vzhJbIe7HLSR4n2A" && v.id && v.title && v.publishedAt);
     const longForm = all.filter((v) => v.type !== "short");
@@ -127,6 +138,8 @@ export const getSiteContent = createServerFn({ method: "GET" }).handler(
 
     const shown = new Set([featured?.id, ...latest.map((v) => v.id)].filter(Boolean));
 
+    const aboutVideoId = cfg?.about_video_id ?? null;
+
     return {
       featured,
       all,
@@ -134,6 +147,10 @@ export const getSiteContent = createServerFn({ method: "GET" }).handler(
       trending,
       shorts: shorts.slice(0, cfg?.shorts_count ?? 8),
       more: longForm.filter((v) => !shown.has(v.id)).slice(0, 6),
+      promotions: all.filter((v) => v.isPromotion),
+      aboutVideoId,
+      aboutVideo: aboutVideoId ? (all.find((v) => v.id === aboutVideoId) ?? null) : null,
+      promotionMarkers: markers,
       lastUpdated: freshState?.last_success_at ?? null,
       lastError: freshState?.last_error ?? null,
       refreshSeconds,
