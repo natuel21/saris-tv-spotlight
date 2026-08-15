@@ -14,13 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      promotion_requests: {
+        Row: {
+          additional_info: string | null
+          business_name: string
+          campaign_description: string
+          contact_person: string
+          created_at: string
+          email: string
+          id: string
+          link: string | null
+          phone: string
+          preferred_contact: string | null
+          product_or_service: string
+          promotion_type: string
+          status: string
+        }
+        Insert: {
+          additional_info?: string | null
+          business_name: string
+          campaign_description: string
+          contact_person: string
+          created_at?: string
+          email: string
+          id?: string
+          link?: string | null
+          phone: string
+          preferred_contact?: string | null
+          product_or_service: string
+          promotion_type: string
+          status?: string
+        }
+        Update: {
+          additional_info?: string | null
+          business_name?: string
+          campaign_description?: string
+          contact_person?: string
+          created_at?: string
+          email?: string
+          id?: string
+          link?: string | null
+          phone?: string
+          preferred_contact?: string | null
+          product_or_service?: string
+          promotion_type?: string
+          status?: string
+        }
+        Relationships: []
+      }
       yt_config: {
         Row: {
+          about_video_id: string | null
           featured_mode: string
           featured_video_id: string | null
           id: boolean
           latest_count: number
           min_trending_score: number
+          promotion_markers: string[]
           refresh_seconds: number
           shorts_count: number
           trending_count: number
@@ -33,11 +83,13 @@ export type Database = {
           weight_velocity: number
         }
         Insert: {
+          about_video_id?: string | null
           featured_mode?: string
           featured_video_id?: string | null
           id?: boolean
           latest_count?: number
           min_trending_score?: number
+          promotion_markers?: string[]
           refresh_seconds?: number
           shorts_count?: number
           trending_count?: number
@@ -50,11 +102,13 @@ export type Database = {
           weight_velocity?: number
         }
         Update: {
+          about_video_id?: string | null
           featured_mode?: string
           featured_video_id?: string | null
           id?: boolean
           latest_count?: number
           min_trending_score?: number
+          promotion_markers?: string[]
           refresh_seconds?: number
           shorts_count?: number
           trending_count?: number
