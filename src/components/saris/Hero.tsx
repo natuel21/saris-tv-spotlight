@@ -1,80 +1,86 @@
-import { useEffect, useState } from "react";
 import { ArrowRight, Play } from "lucide-react";
-import heroImg from "@/assets/hero.jpg";
-import { SOCIAL, CHANNEL_URL } from "@/lib/saris";
+import banner from "@/assets/saris-banner.png.asset.json";
+import logo from "@/assets/saris-logo.png.asset.json";
+import { CHANNEL_URL } from "@/lib/saris";
 import type { SiteVideo } from "@/lib/youtube.functions";
 
 export function Hero({ latest }: { latest?: SiteVideo | null }) {
-  const [offset, setOffset] = useState(0);
-
-  useEffect(() => {
-    const onScroll = () => setOffset(Math.min(window.scrollY, 600) * 0.15);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
-    <section id="top" className="grain relative min-h-[88vh] overflow-hidden md:min-h-[86vh]">
-      <img
-        src={heroImg}
-        alt="Saris TV crew filming on a neon-lit Addis Ababa street at night"
-        width={1920}
-        height={1088}
-        className="absolute inset-0 size-full scale-110 object-cover"
-        style={{ transform: `translate3d(0, ${offset}px, 0) scale(1.1)` }}
+    <section id="top" className="relative overflow-hidden bg-background pt-28 pb-16 md:pt-36 md:pb-24">
+      <div
+        className="pointer-events-none absolute -left-40 top-10 size-[28rem] rounded-full opacity-[0.07] blur-3xl"
+        style={{ background: "var(--gradient-accent)" }}
       />
-      <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
 
-      <div className="relative mx-auto flex min-h-[88vh] max-w-[1400px] flex-col justify-end px-5 pb-16 pt-32 md:min-h-[86vh] md:px-10 md:pb-24">
-        <div className="max-w-4xl text-on-hero">
-          <p className="micro-label animate-fade-in mb-6 flex items-center gap-3 text-accent">
+      <div className="mx-auto grid max-w-[1400px] items-center gap-12 px-5 md:px-10 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
+        <div className="animate-fade-in">
+          <img src={logo.url} alt="Saris TV logo" width={320} height={160} className="h-12 w-auto md:h-16" />
+
+          <p className="micro-label mt-8 flex items-center gap-3 text-primary">
             <span className="h-px w-10 bg-accent" />
-            Saris TV
-          </p>
-          <h1 className="animate-fade-in text-[2.75rem] leading-[0.95] font-bold sm:text-6xl lg:text-[5.5rem]">
-            We Watch. We Review.
-            <br />
-            <span className="text-accent">You Decide.</span>
-          </h1>
-          <p className="animate-fade-in mt-6 max-w-xl text-base leading-relaxed text-on-hero/85 sm:text-lg">
-            Honest reviews, conversations, and reactions to the people, entertainment, trends, and
-            stories shaping Ethiopian social media.
+            Ethiopian Digital Media · Addis Ababa
           </p>
 
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <a
-              href="#reviews"
-              className="font-display group inline-flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-4 text-sm font-semibold text-primary-foreground transition-transform duration-200 hover:scale-[1.03]"
-              style={{ boxShadow: "var(--shadow-glow)" }}
-            >
-              Explore Reviews
-              <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
-            </a>
+          <h1 className="mt-5 text-[2.75rem] leading-[0.98] font-bold text-primary sm:text-6xl lg:text-[4.5rem]">
+            SARIS TV
+            <span className="mt-3 block text-[1.75rem] leading-[1.08] text-foreground sm:text-4xl lg:text-[3rem]">
+              Find Opportunities.
+              <br />
+              <span className="relative inline-block">
+                Build Wealth.
+                <span className="absolute inset-x-0 -bottom-1 h-[6px] rounded-full bg-accent" />
+              </span>
+            </span>
+          </h1>
+
+          <p className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            Saris TV connects people with opportunities, ideas, businesses, stories, entertainment,
+            and experiences that can help create a better life today.
+          </p>
+
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
             <a
               href={latest?.url ?? CHANNEL_URL}
               target="_blank"
               rel="noreferrer noopener"
-              className="font-display inline-flex items-center justify-center gap-2 rounded-full border border-on-hero/40 bg-on-hero/10 px-7 py-4 text-sm font-semibold text-on-hero backdrop-blur-md transition-colors duration-200 hover:bg-accent hover:text-accent-foreground"
+              className="font-display inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-4 text-sm font-semibold text-primary-foreground transition-transform duration-200 hover:scale-[1.03]"
+              style={{ boxShadow: "var(--shadow-glow)" }}
             >
               <Play size={14} className="fill-current" strokeWidth={0} />
-              Watch Latest Video
+              Watch Saris TV
             </a>
             <a
-              href={SOCIAL.youtube}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="font-display inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-4 text-sm font-semibold text-accent-foreground transition-transform duration-200 hover:scale-[1.03]"
+              href="#promote"
+              className="font-display group inline-flex items-center justify-center gap-2 rounded-full border border-primary/25 bg-accent px-8 py-4 text-sm font-semibold text-accent-foreground transition-transform duration-200 hover:scale-[1.03]"
             >
-              Subscribe on YouTube
+              Explore Opportunities
+              <ArrowRight size={16} className="transition-transform duration-200 group-hover:translate-x-1" />
             </a>
           </div>
+        </div>
 
-          <div className="mt-10 inline-flex items-center gap-2.5 rounded-full border border-on-hero/30 bg-on-hero/10 px-4 py-2 backdrop-blur-md">
-            <span className="relative flex size-2">
-              <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-70" />
-              <span className="relative inline-flex size-2 rounded-full bg-accent" />
+        <div className="relative">
+          <span className="absolute -left-4 -top-4 hidden size-24 rounded-3xl border-4 border-accent md:block" />
+          <span className="absolute -bottom-5 -right-4 hidden size-28 rounded-full bg-primary/10 md:block" />
+          <div
+            className="relative overflow-hidden rounded-[2rem] border border-border bg-card"
+            style={{ boxShadow: "var(--shadow-lift)" }}
+          >
+            <img
+              src={banner.url}
+              alt="Saris Media — your daily source of opportunity"
+              width={1920}
+              height={1080}
+              className="h-auto w-full object-contain"
+            />
+          </div>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <span className="micro-label rounded-full bg-primary px-4 py-2 text-primary-foreground">
+              Your Daily Source of Opportunity
             </span>
-            <span className="micro-label text-on-hero/85">New episode every week</span>
+            <span className="micro-label rounded-full border border-border px-4 py-2 text-muted-foreground">
+              Business · Culture · Lifestyle · Travel
+            </span>
           </div>
         </div>
       </div>
