@@ -173,7 +173,7 @@ export const searchVideos = createServerFn({ method: "GET" })
       .or(`title.ilike.%${escaped}%,description.ilike.%${escaped}%,category.ilike.%${escaped}%`)
       .order("published_at", { ascending: false })
       .limit(24);
-    return (rows ?? []).map(toVideo);
+    return (rows ?? []).map((r) => toVideo(r));
   });
 
 export const getConfig = createServerFn({ method: "GET" }).handler(async () => {
@@ -196,6 +196,8 @@ export type ConfigInput = Partial<{
   weight_growth: number;
   weight_popularity: number;
   trending_window_days: number;
+  about_video_id: string | null;
+  promotion_markers: string[];
 }>;
 
 /** Owner-only settings update (signed-in users of this project only). */
@@ -210,4 +212,55 @@ export const updateConfig = createServerFn({ method: "POST" })
       .eq("id", true);
     if (error) throw new Error(error.message);
     return { ok: true };
+  });
+
+export type PromotionRequestInput = {
+  business_name: string;
+  contact_person: string;
+  email: string;
+  phone: string;
+  product_or_service: string;
+  promotion_type: string;
+  campaign_description: string;
+  link?: string;
+  preferred_contact?: string;
+  additional_info?: string;
+};
+
+/** Public promotion enquiry: validated server-side, then stored for the Saris TV team. */
+export const submitPromotionRequest = createServerFn({ method: "POST" })
+  .inputValidator((data: PromotionRequestInput) => {
+    const s = (v: unknown, max: number) => String(v ?? "").trim().slice(0, max);
+    const parsed = {
+      business_name: s(data?.business_name, 120),
+      contact_person: s(data?.contact_person, 120),
+      email: s(data?.email, 200),
+      phone: s(data?.phone, 40),
+      product_or_service: s(data?.product_or_service, 200),
+      promotion_type: s(data?.promotion_type, 60),
+      campaign_description: s(data?.campaign_description, 2000),
+      link: s(data?.link, 300),
+      preferred_contact: s(data?.preferred_contact, 40),
+      additional_info: s(data?.additional_info, 2000),
+    };
+    const required: Array<keyof typeof parsed> = [
+      "business_name",
+      "contact_person",
+      "email",
+      "phone",
+      "product_or_service",
+      "promotion_type",
+      "campaign_description",
+    ];
+    for (const key of required) {
+      if (!parsed[key]) throw new Error(`Missing required field: ${key.replace(/_/g, " ")}`);
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(parsed.email)) throw new Error("Invalid email address");
+    return parsed;
+  })
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.from("promotion_requests").insert(data);
+    if (error) throw new Error(error.message);
+    return { ok: true as const };
   });
