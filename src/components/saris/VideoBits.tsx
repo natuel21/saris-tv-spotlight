@@ -41,11 +41,9 @@ export function Thumb({
 
 export function TrendingBadge({ badge }: { badge: string | null }) {
   if (!badge) return null;
-  const label =
-    badge === "TRENDING" ? "🔥 TRENDING" : badge === "RISING" ? "🚀 RISING" : badge;
   return (
     <span className="micro-label rounded-full bg-accent px-3 py-1 text-accent-foreground">
-      {label}
+      {badge}
     </span>
   );
 }
@@ -85,6 +83,11 @@ export function VideoCard({ video, rank }: { video: SiteVideo; rank?: number }) 
         <span className="micro-label absolute left-4 bottom-3 rounded-full bg-background/90 px-3 py-1 backdrop-blur-md">
           {video.category}
         </span>
+        {video.isPromotion ? (
+          <span className="micro-label absolute right-4 top-3 rounded-full bg-accent px-3 py-1 text-accent-foreground">
+            Promotion
+          </span>
+        ) : null}
         {video.durationSeconds ? (
           <span className="micro-label absolute bottom-3 right-3 rounded-md bg-foreground/85 px-2 py-1 text-background">
             {formatDuration(video.durationSeconds)}

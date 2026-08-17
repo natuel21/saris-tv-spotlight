@@ -246,3 +246,61 @@
     display: none;
   }
 }
+
+/* --- Saris TV motion layer -------------------------------------------- */
+
+@keyframes saris-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -10px, 0); }
+}
+
+@keyframes saris-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(18px, -14px, 0) scale(1.06); }
+}
+
+@keyframes saris-line-up {
+  from { opacity: 0; transform: translate3d(0, 26px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes saris-image-reveal {
+  from { opacity: 0; clip-path: inset(0 0 100% 0); transform: scale(1.04); }
+  to { opacity: 1; clip-path: inset(0 0 0 0); transform: scale(1); }
+}
+
+@utility float-soft {
+  animation: saris-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@utility drift-slow {
+  animation: saris-drift 16s ease-in-out infinite;
+  will-change: transform;
+}
+
+@utility line-up {
+  opacity: 0;
+  animation: saris-line-up 700ms var(--ease-out-soft) forwards;
+  will-change: transform, opacity;
+}
+
+@utility image-reveal {
+  animation: saris-image-reveal 900ms var(--ease-out-soft) both;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

@@ -3,9 +3,14 @@ import { Menu, X, Youtube, Instagram, Play } from "lucide-react";
 import logo from "@/assets/saris-logo.png.asset.json";
 import { SOCIAL } from "@/lib/saris";
 
-const links = ["Home", "Reviews", "Trending", "Videos", "About"];
-
-const hrefFor = (l: string) => (l === "Home" ? "#top" : `#${l.toLowerCase()}`);
+const links = [
+  { label: "Home", href: "#top" },
+  { label: "Latest", href: "#reviews" },
+  { label: "Trending", href: "#trending" },
+  { label: "Promote", href: "#promote" },
+  { label: "Promotions", href: "#promotions" },
+  { label: "About", href: "#about" },
+];
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -39,8 +44,8 @@ export function Nav() {
 
         <nav className="hidden items-center gap-9 lg:flex">
           {links.map((l) => (
-            <a key={l} href={hrefFor(l)} className="nav-link font-display text-sm font-medium">
-              {l}
+            <a key={l.label} href={l.href} className="nav-link font-display text-sm font-medium">
+              {l.label}
             </a>
           ))}
         </nav>
@@ -86,12 +91,12 @@ export function Nav() {
         <nav className="border-t border-border bg-background/95 px-5 pb-6 pt-2 backdrop-blur-xl lg:hidden">
           {links.map((l) => (
             <a
-              key={l}
-              href={hrefFor(l)}
+              key={l.label}
+              href={l.href}
               onClick={() => setOpen(false)}
               className="font-display block border-b border-border/60 py-4 text-lg font-semibold"
             >
-              {l}
+              {l.label}
             </a>
           ))}
         </nav>
