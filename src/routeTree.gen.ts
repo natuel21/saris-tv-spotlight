@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as ApiPublicYoutubeSyncRouteImport } from './routes/api/public/youtube/sync'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicYoutubeSyncRoute = ApiPublicYoutubeSyncRouteImport.update({
@@ -25,27 +31,31 @@ const ApiPublicYoutubeSyncRoute = ApiPublicYoutubeSyncRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/api/public/youtube/sync': typeof ApiPublicYoutubeSyncRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/api/public/youtube/sync': typeof ApiPublicYoutubeSyncRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/api/public/youtube/sync': typeof ApiPublicYoutubeSyncRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/public/youtube/sync'
+  fullPaths: '/' | '/about' | '/api/public/youtube/sync'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/public/youtube/sync'
-  id: '__root__' | '/' | '/api/public/youtube/sync'
+  to: '/' | '/about' | '/api/public/youtube/sync'
+  id: '__root__' | '/' | '/about' | '/api/public/youtube/sync'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   ApiPublicYoutubeSyncRoute: typeof ApiPublicYoutubeSyncRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/youtube/sync': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   ApiPublicYoutubeSyncRoute: ApiPublicYoutubeSyncRoute,
 }
 export const routeTree = rootRouteImport
