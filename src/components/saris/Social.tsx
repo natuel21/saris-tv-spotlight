@@ -1,11 +1,13 @@
-import { Youtube, Instagram, Facebook, Music2, ArrowUpRight } from "lucide-react";
+import { Youtube, Instagram, Facebook, ArrowUpRight } from "lucide-react";
 import { Reveal, SectionHead } from "./Section";
+import { TikTokIcon } from "./icons";
+import { SOCIAL } from "@/lib/saris";
 
 const platforms = [
-  { name: "YouTube", icon: Youtube, count: "32.4K", label: "Subscribers", desc: "Full reviews, reaction episodes and long-form conversations." },
-  { name: "TikTok", icon: Music2, count: "18.9K", label: "Followers", desc: "Fast verdicts, hot takes and the clips people repost." },
-  { name: "Instagram", icon: Instagram, count: "11.2K", label: "Followers", desc: "Behind the scenes, ratings cards and story polls." },
-  { name: "Facebook", icon: Facebook, count: "7.6K", label: "Followers", desc: "Where the comment section becomes its own show." },
+  { name: "YouTube", href: SOCIAL.youtube, icon: Youtube, count: "32.4K", label: "Subscribers", desc: "Full reviews, reaction episodes and long-form conversations." },
+  { name: "TikTok", href: SOCIAL.tiktok, icon: TikTokIcon, count: "18.9K", label: "Followers", desc: "Fast verdicts, hot takes and the clips people repost." },
+  { name: "Instagram", href: SOCIAL.instagram, icon: Instagram, count: "11.2K", label: "Followers", desc: "Behind the scenes, ratings cards and story polls." },
+  { name: "Facebook", href: SOCIAL.facebook, icon: Facebook, count: "7.6K", label: "Followers", desc: "Where the comment section becomes its own show." },
 ];
 
 export function Social() {
@@ -38,7 +40,10 @@ export function Social() {
                   </div>
                   <p className="text-sm text-muted-foreground">{p.desc}</p>
                   <a
-                    href="#follow"
+                    href={p.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Visit Saris TV on ${p.name}`}
                     className="font-display mt-2 inline-flex items-center justify-between rounded-full border border-border px-5 py-3 text-sm font-semibold transition-colors duration-200 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground"
                   >
                     Follow on {p.name}
