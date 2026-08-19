@@ -71,7 +71,7 @@ function Index() {
         <Promotions content={data} isLoading={isLoading} onRequest={openForm} />
         <About content={data} />
         <Founder />
-        <AboutVideo content={data} />
+        <AboutVideo />
         <PromoteCta onRequest={openForm} />
         <Social />
         <Newsletter />

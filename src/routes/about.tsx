@@ -44,7 +44,7 @@ function AboutPage() {
       <main className="pt-20 md:pt-24">
         <About content={data} />
         <Founder />
-        <AboutVideo content={data} />
+        <AboutVideo />
         <PromoteCta onRequest={() => setFormOpen(true)} />
       </main>
       <Footer />
