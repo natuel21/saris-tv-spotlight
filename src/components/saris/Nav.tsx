@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Menu, X, Youtube, Instagram, Play } from "lucide-react";
-import logo from "@/assets/saris-logo.png.asset.json";
+import { Menu, X, Youtube, Instagram, Facebook, Play } from "lucide-react";
+import logo from "@/assets/saris-logo-new.png.asset.json";
 import { SOCIAL } from "@/lib/saris";
+import { TikTokIcon } from "./icons";
 
 const links = [
   { label: "Home", href: "#top" },
@@ -11,6 +12,13 @@ const links = [
   { label: "Promotions", href: "#promotions" },
   { label: "About", href: "#about" },
 ];
+
+export const SOCIAL_LINKS = [
+  { key: "youtube", href: SOCIAL.youtube, label: "YouTube", Icon: Youtube },
+  { key: "instagram", href: SOCIAL.instagram, label: "Instagram", Icon: Instagram },
+  { key: "facebook", href: SOCIAL.facebook, label: "Facebook", Icon: Facebook },
+  { key: "tiktok", href: SOCIAL.tiktok, label: "TikTok", Icon: TikTokIcon },
+] as const;
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -32,13 +40,13 @@ export function Nav() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-5 md:h-20 md:px-10">
-        <a href="#top" className="flex items-center">
+        <a href="#top" className="flex items-center py-1.5 pr-3">
           <img
             src={logo.url}
             alt="Saris TV logo"
-            width={320}
-            height={160}
-            className="h-9 w-auto md:h-11"
+            width={706}
+            height={353}
+            className="h-9 w-auto md:h-12"
           />
         </a>
 
@@ -51,18 +59,16 @@ export function Nav() {
         </nav>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <div className="hidden items-center gap-1 xl:flex">
-            {[
-              { Icon: Youtube, href: SOCIAL.youtube, label: "YouTube" },
-              { Icon: Instagram, href: SOCIAL.instagram, label: "Instagram" },
-            ].map(({ Icon, href, label }) => (
+          <div className="hidden items-center gap-1 md:flex">
+            {SOCIAL_LINKS.map(({ key, Icon, href, label }) => (
               <a
-                key={label}
+                key={key}
                 href={href}
                 target="_blank"
-                rel="noreferrer noopener"
-                aria-label={`Saris TV on ${label}`}
-                className="inline-flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors duration-200 hover:bg-secondary hover:text-primary"
+                rel="noopener noreferrer"
+                aria-label={`Visit Saris TV on ${label}`}
+                title={`Visit Saris TV on ${label}`}
+                className="inline-flex size-9 items-center justify-center rounded-full text-muted-foreground transition-all duration-200 hover:scale-110 hover:bg-secondary hover:text-primary"
               >
                 <Icon size={18} />
               </a>
@@ -71,7 +77,7 @@ export function Nav() {
           <a
             href={SOCIAL.youtube}
             target="_blank"
-            rel="noreferrer noopener"
+            rel="noopener noreferrer"
             className="font-display inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-transform duration-200 hover:scale-[1.04] md:px-5"
           >
             <Play size={14} className="fill-current" strokeWidth={0} />
@@ -99,6 +105,20 @@ export function Nav() {
               {l.label}
             </a>
           ))}
+          <div className="flex gap-2 pt-5 md:hidden">
+            {SOCIAL_LINKS.map(({ key, Icon, href, label }) => (
+              <a
+                key={key}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Visit Saris TV on ${label}`}
+                className="inline-flex size-11 items-center justify-center rounded-full border border-border text-foreground transition-colors duration-200 hover:border-primary hover:bg-primary hover:text-primary-foreground"
+              >
+                <Icon size={18} />
+              </a>
+            ))}
+          </div>
         </nav>
       ) : null}
     </header>
