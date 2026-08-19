@@ -304,3 +304,28 @@
     transform: none !important;
   }
 }
+
+/* Promotion-section announcement marquee */
+@keyframes saris-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.saris-marquee-track {
+  animation: saris-marquee 34s linear infinite;
+  will-change: transform;
+}
+
+.saris-marquee:hover .saris-marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .saris-marquee-track {
+    animation: none;
+  }
+}
