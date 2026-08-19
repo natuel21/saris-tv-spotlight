@@ -63,7 +63,11 @@ export function PromotionForm({
       });
       setDone(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setError(
+        err instanceof Error && /Missing required|Invalid email/.test(err.message)
+          ? err.message
+          : "We couldn't submit your request right now. Please try again or contact Saris TV directly.",
+      );
     } finally {
       setBusy(false);
     }
@@ -82,8 +86,8 @@ export function PromotionForm({
             <CheckCircle2 size={44} className="text-primary" />
             <DialogTitle className="font-display text-2xl">Request received</DialogTitle>
             <DialogDescription className="max-w-md text-base">
-              Thank you. Your promotion request has been received. The Saris TV team will review
-              your request and contact you.
+              Thank you for contacting Saris TV. Your promotion request has been received and our
+              team will review it and contact you shortly.
             </DialogDescription>
             <button
               type="button"

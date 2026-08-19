@@ -1,5 +1,6 @@
 import { BarChart3, Megaphone, Store, Users } from "lucide-react";
 import { Reveal } from "./Section";
+import { PromoMarquee } from "./PromoMarquee";
 
 const pillars = [
   { Icon: Megaphone, title: "Promotional Videos", copy: "Full features and short-form promotions produced for the Saris TV audience." },
@@ -62,7 +63,9 @@ export function Promote({
           </Reveal>
         </div>
 
-        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <PromoMarquee />
+
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {pillars.map((p, i) => (
             <Reveal key={p.title} delay={i * 90}>
               <article className="h-full rounded-3xl border border-primary-foreground/15 bg-primary-foreground/5 p-7 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-accent/70">
