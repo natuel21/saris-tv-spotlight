@@ -17,6 +17,7 @@ export type Database = {
       promotion_requests: {
         Row: {
           additional_info: string | null
+          budget_campaign_info: string | null
           business_name: string
           campaign_description: string
           contact_person: string
@@ -32,6 +33,7 @@ export type Database = {
         }
         Insert: {
           additional_info?: string | null
+          budget_campaign_info?: string | null
           business_name: string
           campaign_description: string
           contact_person: string
@@ -47,6 +49,7 @@ export type Database = {
         }
         Update: {
           additional_info?: string | null
+          budget_campaign_info?: string | null
           business_name?: string
           campaign_description?: string
           contact_person?: string

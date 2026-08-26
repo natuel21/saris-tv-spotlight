@@ -90,7 +90,7 @@ export function Videos({
                 {shorts.map((v) => (
                   <a
                     key={v.id}
-                    href={`https://www.youtube.com/shorts/${v.id}`}
+                    href={`https://www.youtube.com/watch?v=${v.id}`}
                     target="_blank"
                     rel="noreferrer noopener"
                     className="group w-[62vw] shrink-0 snap-start overflow-hidden rounded-3xl border border-border bg-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/50 sm:w-[240px]"
