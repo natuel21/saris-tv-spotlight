@@ -139,6 +139,11 @@ type VideoList = {
     };
     contentDetails: { duration: string };
     statistics: { viewCount?: string; likeCount?: string; commentCount?: string };
+    status: {
+      privacyStatus?: string;
+      uploadStatus?: string;
+      embeddable?: boolean;
+    };
   }>;
 };
 
@@ -153,9 +158,8 @@ async function getUploadsPlaylistId(current: string | null) {
   return uploads;
 }
 
-/** Refreshes the local cache from the channel's uploads playlist. Returns the sync state row. */
-export async function syncChannel(options: { maxVideos?: number } = {}) {
-  const maxVideos = options.maxVideos ?? 50;
+/** Reconciles the local cache with every currently public upload on the official channel. */
+export async function syncChannel() {
   const { data: stateRow } = await supabaseAdmin
     .from("yt_sync_state")
     .select("*")
@@ -178,11 +182,11 @@ export async function syncChannel(options: { maxVideos?: number } = {}) {
 
     const ids: string[] = [];
     let pageToken: string | undefined;
-    while (ids.length < maxVideos) {
+    while (true) {
       const page: PlaylistItems = await yt("playlistItems", {
         part: "contentDetails",
         playlistId: uploads,
-        maxResults: String(Math.min(50, maxVideos - ids.length)),
+        maxResults: "50",
         ...(pageToken ? { pageToken } : {}),
       });
       ids.push(...page.items.map((i) => i.contentDetails.videoId));
@@ -194,7 +198,7 @@ export async function syncChannel(options: { maxVideos?: number } = {}) {
     for (let i = 0; i < ids.length; i += 50) {
       const chunk = ids.slice(i, i + 50);
       const page = await yt<VideoList>("videos", {
-        part: "snippet,contentDetails,statistics",
+        part: "snippet,contentDetails,statistics,status",
         id: chunk.join(","),
       });
       details.push(...page.items);
@@ -207,8 +211,17 @@ export async function syncChannel(options: { maxVideos?: number } = {}) {
 
     const now = Date.now();
     const rows = details
-      // Never show anything that is not on the official Saris TV channel.
-      .filter((v) => v.snippet?.channelId === CHANNEL_ID && v.snippet?.title && v.snippet?.publishedAt)
+      // videos.list omits deleted/private IDs. Status checks also exclude unprocessed,
+      // non-public, and non-embeddable uploads before they enter the public cache.
+      .filter(
+        (v) =>
+          v.snippet?.channelId === CHANNEL_ID &&
+          v.snippet?.title &&
+          v.snippet?.publishedAt &&
+          v.status?.privacyStatus === "public" &&
+          v.status?.uploadStatus === "processed" &&
+          v.status?.embeddable !== false,
+      )
       .map((v) => {
       const duration = parseDuration(v.contentDetails?.duration ?? "");
       const live = v.snippet.liveBroadcastContent;
@@ -297,6 +310,15 @@ export async function syncChannel(options: { maxVideos?: number } = {}) {
         .lt("captured_at", new Date(now - 14 * 86_400_000).toISOString());
     }
 
+    // Reconciliation is performed only after the complete uploads playlist and
+    // every details batch succeeded, so a transient API failure cannot erase cache.
+    const publicIds = new Set(finalRows.map((row) => row.id));
+    const staleIds = (previous ?? []).map((row) => row.id).filter((id) => !publicIds.has(id));
+    for (let i = 0; i < staleIds.length; i += 100) {
+      const { error } = await supabaseAdmin.from("yt_videos").delete().in("id", staleIds.slice(i, i + 100));
+      if (error) throw new Error(error.message);
+    }
+
     await supabaseAdmin
       .from("yt_sync_state")
       .update({
@@ -308,7 +330,7 @@ export async function syncChannel(options: { maxVideos?: number } = {}) {
       })
       .eq("id", true);
 
-    return { ok: true as const, synced: finalRows.length };
+    return { ok: true as const, synced: finalRows.length, removed: staleIds.length };
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("[youtube sync]", message);

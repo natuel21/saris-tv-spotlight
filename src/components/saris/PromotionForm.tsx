@@ -57,6 +57,7 @@ export function PromotionForm({
           promotion_type: value("promotion_type"),
           campaign_description: value("campaign_description"),
           link: value("link"),
+          budget_campaign_info: value("budget_campaign_info"),
           preferred_contact: value("preferred_contact"),
           additional_info: value("additional_info"),
         },
@@ -151,6 +152,10 @@ export function PromotionForm({
                     <option key={m} value={m}>{m}</option>
                   ))}
                 </select>
+              </div>
+              <div className="sm:col-span-2">
+                <label className={label} htmlFor="budget_campaign_info">Budget / Campaign Information</label>
+                <textarea id="budget_campaign_info" name="budget_campaign_info" maxLength={1000} className={area} />
               </div>
               <div className="sm:col-span-2">
                 <label className={label} htmlFor="additional_info">Additional Information</label>
