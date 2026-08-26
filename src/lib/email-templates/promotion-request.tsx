@@ -42,7 +42,7 @@ const value: React.CSSProperties = {
   whiteSpace: 'pre-wrap',
 }
 
-function Field({ name, val }: { name: string; val?: string }) {
+function Field({ name, val }: { name: string; val?: string | undefined }) {
   if (!val) return null
   return (
     <Section>
@@ -101,7 +101,7 @@ export function PromotionRequestEmail(props: PromotionRequestEmailProps) {
 export const template = {
   component: PromotionRequestEmail,
   subject: (d: Record<string, any>) =>
-    `New Saris TV Promotion Request — ${d.businessName ?? 'Unknown'}`,
+    `New Saris TV Promotion Request — ${d['businessName'] ?? 'Unknown'}`,
   displayName: 'Promotion Request Notification',
   to: 'saristvethiopia@gmail.com',
   previewData: {
