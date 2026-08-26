@@ -139,7 +139,46 @@ export const submitPromotionRequest = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("promotion_requests").insert(data);
+    const { data: row, error } = await supabaseAdmin
+      .from("promotion_requests")
+      .insert(data)
+      .select("id")
+      .single();
     if (error) throw new Error(error.message);
-    return { ok: true as const };
+
+    // Deliver the full request to the Saris TV team inbox. The request is
+    // already stored; email failures are reported so the UI can react.
+    try {
+      const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
+      const result = await sendTemplateEmail("promotion-request", "saristvethiopia@gmail.com", {
+        from: "Saris TV Promotions <promotions@sarismultimedia.com>",
+        replyTo: data.email,
+        idempotencyKey: `promotion-request-${row.id}`,
+        templateData: {
+          businessName: data.business_name,
+          contactPerson: data.contact_person,
+          email: data.email,
+          phone: data.phone,
+          productOrService: data.product_or_service,
+          promotionType: data.promotion_type,
+          campaignDescription: data.campaign_description,
+          link: data.link,
+          budgetInfo: data.budget_campaign_info,
+          preferredContact: data.preferred_contact,
+          additionalInfo: data.additional_info,
+          timestamp: new Date().toISOString(),
+        },
+      });
+      if (!result.sent) {
+        return { ok: true as const, emailed: false as const, reason: result.reason };
+      }
+      return { ok: true as const, emailed: true as const };
+    } catch (e) {
+      console.error("Promotion request email failed", e);
+      return {
+        ok: true as const,
+        emailed: false as const,
+        reason: e instanceof Error ? e.message : "Email delivery failed",
+      };
+    }
   });
