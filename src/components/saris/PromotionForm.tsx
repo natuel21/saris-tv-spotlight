@@ -47,7 +47,7 @@ export function PromotionForm({
     const f = new FormData(e.currentTarget);
     const value = (k: string) => String(f.get(k) ?? "").trim();
     try {
-      await submit({
+      const result = await submit({
         data: {
           business_name: value("business_name"),
           contact_person: value("contact_person"),
@@ -62,7 +62,13 @@ export function PromotionForm({
           additional_info: value("additional_info"),
         },
       });
-      setDone(true);
+      if (result.emailed) {
+        setDone(true);
+      } else {
+        setError(
+          "Your request was saved, but the notification email to our team could not be delivered right now. Your request is safely stored and we will still review it — you can also reach us at saristvethiopia@gmail.com.",
+        );
+      }
     } catch (err) {
       setError(
         err instanceof Error && /Missing required|Invalid email/.test(err.message)
