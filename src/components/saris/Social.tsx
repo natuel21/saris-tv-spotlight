@@ -4,11 +4,12 @@ import { TikTokIcon } from "./icons";
 import { SOCIAL } from "@/lib/saris";
 
 const platforms = [
-  { name: "YouTube", href: SOCIAL.youtube, icon: Youtube, count: "32.4K", label: "Subscribers", desc: "Full reviews, reaction episodes and long-form conversations." },
-  { name: "TikTok", href: SOCIAL.tiktok, icon: TikTokIcon, count: "18.9K", label: "Followers", desc: "Fast verdicts, hot takes and the clips people repost." },
-  { name: "Instagram", href: SOCIAL.instagram, icon: Instagram, count: "11.2K", label: "Followers", desc: "Behind the scenes, ratings cards and story polls." },
-  { name: "Facebook", href: SOCIAL.facebook, icon: Facebook, count: "7.6K", label: "Followers", desc: "Where the comment section becomes its own show." },
+  { name: "YouTube", href: SOCIAL.youtube, icon: Youtube, desc: "Full reviews, reaction episodes and long-form conversations." },
+  { name: "TikTok", href: SOCIAL.tiktok, icon: TikTokIcon, desc: "Fast verdicts, hot takes and the clips people repost." },
+  { name: "Instagram", href: SOCIAL.instagram, icon: Instagram, desc: "Behind the scenes, ratings cards and story polls." },
+  { name: "Facebook", href: SOCIAL.facebook, icon: Facebook, desc: "Where the comment section becomes its own show." },
 ];
+
 
 export function Social() {
   return (
@@ -34,10 +35,8 @@ export function Social() {
                   <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-border bg-secondary text-primary">
                     <p.icon size={22} />
                   </span>
-                  <div>
-                    <p className="font-display text-3xl font-bold">{p.count}</p>
-                    <p className="micro-label mt-1 text-muted-foreground">{p.label}</p>
-                  </div>
+                  <p className="font-display text-2xl font-bold">{p.name}</p>
+
                   <p className="text-sm text-muted-foreground">{p.desc}</p>
                   <a
                     href={p.href}
