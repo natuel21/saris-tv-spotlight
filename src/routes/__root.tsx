@@ -77,25 +77,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Saris TV — We Watch. We Review. You Decide." },
+      { title: "Saris TV Ethiopia | Movies, Music, TV, Creators, Trends & Culture" },
       {
         name: "description",
         content:
-          "Honest reviews, reactions and conversations about Ethiopian film, music, creators and trends.",
+          "Saris TV Ethiopia brings you the latest reviews, opinions, trends, entertainment, business, culture and stories from Addis Ababa and beyond.",
       },
       { name: "author", content: "Saris TV" },
-      { property: "og:title", content: "Saris TV — We Watch. We Review. You Decide." },
-      {
-        property: "og:description",
-        content: "Ethiopian entertainment reviews, trending stories and videos.",
-      },
+      { property: "og:site_name", content: "Saris TV Ethiopia" },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_US" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "preconnect", href: "https://i.ytimg.com" },
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
@@ -106,7 +103,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Saris TV",
+          alternateName: "ሳሪስ ቲቪ",
+          url: "https://sarismultimedia.com",
+          logo: "https://sarismultimedia.com/favicon.png",
+          description:
+            "Ethiopian media and review platform covering movies, music, television, creators, trends, culture, entertainment, business and lifestyle.",
+          email: "saristvethiopia@gmail.com",
+          telephone: "+251999888886",
+          address: { "@type": "PostalAddress", addressLocality: "Addis Ababa", addressCountry: "ET" },
+          areaServed: "ET",
+          sameAs: [
+            "https://www.youtube.com/@SarisTvEthiopia",
+            "https://www.instagram.com/saris_media_ethiopia?igsh=MXdxMjd3cXVndXFsMQ==",
+            "https://www.facebook.com/share/1MRwDHPJoc/",
+            "https://www.tiktok.com/@sarismedia?_r=1&_t=ZS-98x69dcyGOO",
+          ],
+        }),
+      },
+    ],
   }),
+
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,

@@ -35,13 +35,15 @@ export function Featured({
           className="group grid overflow-hidden rounded-3xl border border-border bg-card lg:grid-cols-[1.15fr_1fr]"
           style={{ boxShadow: "var(--shadow-lift)" }}
         >
-          <div className="relative aspect-video overflow-hidden lg:aspect-auto lg:min-h-[22rem]">
+          <div className="relative aspect-video w-full self-center overflow-hidden bg-surface">
             <Thumb
               video={video}
               eager
-              className="transition-transform duration-700 ease-out group-hover:scale-105"
+              fit="contain"
+              className="transition-transform duration-700 ease-out group-hover:scale-[1.02]"
             />
             <PlayOverlay big />
+
             <div className="absolute left-5 top-5 flex flex-wrap gap-2">
               <TrendingBadge badge={video.badge} />
             </div>

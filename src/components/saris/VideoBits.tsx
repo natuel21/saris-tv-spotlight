@@ -8,10 +8,12 @@ export function Thumb({
   video,
   className = "",
   eager = false,
+  fit = "cover",
 }: {
   video: SiteVideo;
   className?: string;
   eager?: boolean;
+  fit?: "cover" | "contain";
 }) {
   const sources = useMemo(() => {
     const cdn = (name: string) => `https://i.ytimg.com/vi/${video.id}/${name}.jpg`;
@@ -33,11 +35,14 @@ export function Thumb({
       width={1280}
       height={720}
       loading={eager ? "eager" : "lazy"}
+      decoding={eager ? "sync" : "async"}
+      fetchPriority={eager ? "high" : "auto"}
       onError={() => setIndex((i) => (i < sources.length - 1 ? i + 1 : i))}
-      className={`size-full object-cover ${className}`}
+      className={`size-full ${fit === "contain" ? "object-contain" : "object-cover"} ${className}`}
     />
   );
 }
+
 
 export function TrendingBadge({ badge }: { badge: string | null }) {
   if (!badge) return null;
