@@ -4,11 +4,12 @@ import { TikTokIcon } from "./icons";
 import { SOCIAL } from "@/lib/saris";
 
 const platforms = [
-  { name: "YouTube", href: SOCIAL.youtube, icon: Youtube, count: "32.4K", label: "Subscribers", desc: "Full reviews, reaction episodes and long-form conversations." },
-  { name: "TikTok", href: SOCIAL.tiktok, icon: TikTokIcon, count: "18.9K", label: "Followers", desc: "Fast verdicts, hot takes and the clips people repost." },
-  { name: "Instagram", href: SOCIAL.instagram, icon: Instagram, count: "11.2K", label: "Followers", desc: "Behind the scenes, ratings cards and story polls." },
-  { name: "Facebook", href: SOCIAL.facebook, icon: Facebook, count: "7.6K", label: "Followers", desc: "Where the comment section becomes its own show." },
+  { name: "YouTube", href: SOCIAL.youtube, icon: Youtube, desc: "Full reviews, reaction episodes and long-form conversations." },
+  { name: "TikTok", href: SOCIAL.tiktok, icon: TikTokIcon, desc: "Fast verdicts, hot takes and the clips people repost." },
+  { name: "Instagram", href: SOCIAL.instagram, icon: Instagram, desc: "Behind the scenes, ratings cards and story polls." },
+  { name: "Facebook", href: SOCIAL.facebook, icon: Facebook, desc: "Where the comment section becomes its own show." },
 ];
+
 
 export function Social() {
   return (

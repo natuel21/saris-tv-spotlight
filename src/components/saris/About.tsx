@@ -1,6 +1,5 @@
 import { Briefcase, Clapperboard, Globe2, Plane, Sparkles, Utensils } from "lucide-react";
 import { Reveal } from "./Section";
-import { useCountUp, useReveal } from "./useReveal";
 import banner from "@/assets/saris-banner.png.asset.json";
 import type { SiteContent } from "@/lib/youtube.functions";
 
@@ -13,29 +12,8 @@ const coverage = [
   { Icon: Sparkles, title: "Opportunities", copy: "Openings, ideas and ventures worth knowing about." },
 ];
 
-function Stat({ value, suffix, label, active }: { value: number; suffix: string; label: string; active: boolean }) {
-  const n = useCountUp(value, active);
-  return (
-    <div className="border-t border-border pt-6">
-      <p className="font-display text-4xl font-bold text-primary md:text-5xl">
-        {n}
-        {suffix}
-      </p>
-      <p className="micro-label mt-3 text-muted-foreground">{label}</p>
-    </div>
-  );
-}
+export function About({ content: _content }: { content?: SiteContent | undefined }) {
 
-export function About({ content }: { content?: SiteContent | undefined }) {
-  const { ref, visible } = useReveal<HTMLDivElement>();
-  const totalVideos = content?.totalVideos ?? 0;
-
-  const stats = [
-    { value: totalVideos, suffix: "+", label: "Videos Published" },
-    { value: 1, suffix: "", label: "Official Channel" },
-    { value: 8, suffix: "", label: "Content Pillars" },
-    { value: 24, suffix: "/7", label: "Always Updating" },
-  ];
 
   return (
     <section id="about" className="mx-auto max-w-[1400px] px-5 py-20 md:px-10 md:py-28">
