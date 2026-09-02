@@ -35,7 +35,7 @@ export function Featured({
           className="group grid overflow-hidden rounded-3xl border border-border bg-card lg:grid-cols-[1.15fr_1fr]"
           style={{ boxShadow: "var(--shadow-lift)" }}
         >
-          <div className="relative aspect-video w-full overflow-hidden bg-surface">
+          <div className="relative aspect-video w-full self-center overflow-hidden bg-surface">
             <Thumb
               video={video}
               eager
