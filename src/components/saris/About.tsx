@@ -65,11 +65,7 @@ export function About({ content: _content }: { content?: SiteContent | undefined
         </Reveal>
       </div>
 
-      <div ref={ref} className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((s) => (
-          <Stat key={s.label} {...s} active={visible} />
-        ))}
-      </div>
+
 
       <div className="mt-20">
         <Reveal>

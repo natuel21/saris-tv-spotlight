@@ -35,10 +35,8 @@ export function Social() {
                   <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-border bg-secondary text-primary">
                     <p.icon size={22} />
                   </span>
-                  <div>
-                    <p className="font-display text-3xl font-bold">{p.count}</p>
-                    <p className="micro-label mt-1 text-muted-foreground">{p.label}</p>
-                  </div>
+                  <p className="font-display text-2xl font-bold">{p.name}</p>
+
                   <p className="text-sm text-muted-foreground">{p.desc}</p>
                   <a
                     href={p.href}
