@@ -27,8 +27,10 @@ export const Route = createFileRoute("/about")({
           "The vision, mission and journey behind Saris TV, an Ethiopian digital media platform based in Addis Ababa.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://sarismultimedia.com/about" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://sarismultimedia.com/about" }],
   }),
   component: AboutPage,
 });
