@@ -5,12 +5,12 @@ import { SOCIAL } from "@/lib/saris";
 import { TikTokIcon } from "./icons";
 
 const links = [
-  { label: "Home", href: "#top" },
-  { label: "Latest", href: "#reviews" },
-  { label: "Trending", href: "#trending" },
-  { label: "Promote", href: "#promote" },
-  { label: "Promotions", href: "#promotions" },
-  { label: "About", href: "#about" },
+  { label: "Home", href: "/#top" },
+  { label: "Latest", href: "/#reviews" },
+  { label: "Trending", href: "/#trending" },
+  { label: "Promote", href: "/#promote" },
+  { label: "Promotions", href: "/#promotions" },
+  { label: "About", href: "/about" },
 ];
 
 export const SOCIAL_LINKS = [
@@ -40,7 +40,7 @@ export function Nav() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-5 md:h-20 md:px-10">
-        <a href="#top" className="flex items-center py-1.5 pr-3">
+        <a href="/#top" aria-label="Saris TV home" className="flex items-center py-1.5 pr-3">
           <img
             src={logo.url}
             alt="Saris TV logo"

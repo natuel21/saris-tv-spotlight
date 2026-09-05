@@ -29,8 +29,35 @@ export const Route = createFileRoute("/about")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://sarismultimedia.com/about" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "robots", content: "index, follow, max-image-preview:large" },
     ],
     links: [{ rel: "canonical", href: "https://sarismultimedia.com/about" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "AboutPage",
+          "@id": "https://sarismultimedia.com/about#webpage",
+          url: "https://sarismultimedia.com/about",
+          name: "About Saris TV — Ethiopian Digital Media, Addis Ababa",
+          description:
+            "Saris TV is an Ethiopian digital media platform based in Addis Ababa covering business, entrepreneurship, economics, entertainment, lifestyle, travel, local culture and opportunities.",
+          isPartOf: { "@id": "https://sarismultimedia.com/#website" },
+          mainEntity: { "@id": "https://sarismultimedia.com/#organization" },
+          about: { "@id": "https://sarismultimedia.com/#organization" },
+          publisher: { "@id": "https://sarismultimedia.com/#organization" },
+          inLanguage: ["en", "am"],
+          breadcrumb: {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://sarismultimedia.com/" },
+              { "@type": "ListItem", position: 2, name: "About", item: "https://sarismultimedia.com/about" },
+            ],
+          },
+        }),
+      },
+    ],
   }),
   component: AboutPage,
 });

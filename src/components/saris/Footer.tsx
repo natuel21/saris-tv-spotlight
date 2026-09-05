@@ -3,7 +3,14 @@ import logo from "@/assets/saris-logo-new.png.asset.json";
 import { CONTACT } from "@/lib/saris";
 import { SOCIAL_LINKS } from "./Nav";
 
-const nav = ["Home", "Reviews", "Videos", "Trending", "About"];
+const nav = [
+  { label: "Home", href: "/#top", title: "Saris TV Ethiopia homepage" },
+  { label: "Reviews", href: "/#reviews", title: "Latest Saris TV reviews and market videos" },
+  { label: "Videos", href: "/#videos", title: "All Saris TV YouTube videos" },
+  { label: "Trending", href: "/#trending", title: "Trending Saris TV videos right now" },
+  { label: "Promotions", href: "/#promotions", title: "Business promotions featured by Saris TV" },
+  { label: "About", href: "/about", title: "About Saris TV, Addis Ababa" },
+];
 
 export function Footer() {
   return (
@@ -22,11 +29,12 @@ export function Footer() {
           <p className="micro-label mb-2 text-primary">Explore</p>
           {nav.map((n) => (
             <a
-              key={n}
-              href={n === "Home" ? "#top" : `#${n.toLowerCase()}`}
+              key={n.label}
+              href={n.href}
+              title={n.title}
               className="font-display text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
             >
-              {n}
+              {n.label}
             </a>
           ))}
         </nav>
