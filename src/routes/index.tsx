@@ -104,12 +104,37 @@ export const Route = createFileRoute("/")({
             "Latest reviews, opinions, trends, entertainment, business and culture from Addis Ababa and beyond.",
         },
         { name: "twitter:image", content: OG_IMAGE },
+        { name: "robots", content: "index, follow, max-image-preview:large, max-video-preview:-1" },
       ],
       links: [{ rel: "canonical", href: `${SITE_URL}/` }],
-      scripts: schemas.map((schema) => ({
-        type: "application/ld+json",
-        children: JSON.stringify(schema),
-      })),
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "@id": `${SITE_URL}/#webpage`,
+            url: `${SITE_URL}/`,
+            name: "Saris TV Ethiopia | Movies, Music, TV, Creators, Trends & Culture",
+            isPartOf: { "@id": `${SITE_URL}/#website` },
+            about: { "@id": `${SITE_URL}/#organization` },
+            publisher: { "@id": `${SITE_URL}/#organization` },
+            inLanguage: ["en", "am"],
+            mentions: [
+              { "@type": "Thing", name: "Business and market in Ethiopia" },
+              { "@type": "Thing", name: "Ethiopian market prices, products and electronics" },
+              { "@type": "Thing", name: "Property and real estate in Addis Ababa" },
+              { "@type": "Thing", name: "Entertainment: movies, music, TV and creators" },
+              { "@type": "Thing", name: "Lifestyle, culture and travel" },
+              { "@type": "Thing", name: "Business opportunities and entrepreneurship" },
+            ],
+          }),
+        },
+        ...schemas.map((schema) => ({
+          type: "application/ld+json",
+          children: JSON.stringify(schema),
+        })),
+      ],
     };
   },
   component: Index,
