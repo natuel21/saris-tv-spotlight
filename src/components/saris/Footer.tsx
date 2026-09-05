@@ -29,11 +29,12 @@ export function Footer() {
           <p className="micro-label mb-2 text-primary">Explore</p>
           {nav.map((n) => (
             <a
-              key={n}
-              href={n === "Home" ? "#top" : `#${n.toLowerCase()}`}
+              key={n.label}
+              href={n.href}
+              title={n.title}
               className="font-display text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
             >
-              {n}
+              {n.label}
             </a>
           ))}
         </nav>
