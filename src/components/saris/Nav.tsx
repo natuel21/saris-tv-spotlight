@@ -5,12 +5,12 @@ import { SOCIAL } from "@/lib/saris";
 import { TikTokIcon } from "./icons";
 
 const links = [
-  { label: "Home", href: "#top" },
-  { label: "Latest", href: "#reviews" },
-  { label: "Trending", href: "#trending" },
-  { label: "Promote", href: "#promote" },
-  { label: "Promotions", href: "#promotions" },
-  { label: "About", href: "#about" },
+  { label: "Home", href: "/#top" },
+  { label: "Latest", href: "/#reviews" },
+  { label: "Trending", href: "/#trending" },
+  { label: "Promote", href: "/#promote" },
+  { label: "Promotions", href: "/#promotions" },
+  { label: "About", href: "/about" },
 ];
 
 export const SOCIAL_LINKS = [
