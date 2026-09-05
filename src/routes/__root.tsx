@@ -109,7 +109,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Organization",
+          "@id": "https://sarismultimedia.com/#organization",
           name: "Saris TV",
+          legalName: "Saris Multimedia",
           alternateName: "ሳሪስ ቲቪ",
           url: "https://sarismultimedia.com",
           logo: "https://sarismultimedia.com/favicon.png",
